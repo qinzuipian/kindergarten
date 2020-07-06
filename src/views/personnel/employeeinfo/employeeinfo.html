@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>职工</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<style>
+		.btn {
+			margin-top: 10px;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="vm">
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+					<div class="layui-form-item">
+						<div class="layui-inline">
+							<label class="layui-form-label">职工姓名</label>
+							<div class="layui-input-inline">
+								<input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">联系电话</label>
+							<div class="layui-input-inline">
+								<input type="text" name="mobilephone" placeholder="请输入" autocomplete="off"
+									class="layui-input">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">角色选择</label>
+							<div class="layui-input-inline">
+								<select name="workgroupsysno" id="workgroupsysno" lay-filter="workgroupsysno">
+									<option value="">请选择角色</option>
+									<option value=""></option>
+								</select>
+							</div>
+						</div>
+						<div class="layui-inline">
+							<label class="layui-form-label">入职日期</label>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" id="startDate" name="startIndate"
+									placeholder="请输入开始日期">
+							</div>
+							<div class="layui-input-inline">
+								<input type="text" class="layui-input" id="endDate" name="endIndate"
+									placeholder="请输入结束日期">
+							</div>
+						</div>
+						<div class="layui-inline">
+							<button class="layui-btn layuiadmin-btn-list" lay-submit
+								lay-filter="LAY-app-contlist-search">
+								<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+
+				<div class="layui-card-body">
+					<div style="padding-bottom: 10px;">
+						<button class="layui-btn layuiadmin-btn-list layui-bg-green" data-type="add">
+							<i class="layui-icon">&#xe654;</i>添加职工
+						</button>
+						<button class="layui-btn layuiadmin-btn-list layui-bg-blue" data-type="edit">
+							<i class="layui-icon">&#xe642;</i>编辑职工
+						</button>
+						<button class="layui-btn layuiadmin-btn-list layui-bg-red" data-type="batchdel">
+							<i class="layui-icon">&#xe640;</i>删除职工
+						</button>
+						<button type="button" class="layui-btn" id="saveExcel">
+							<i class="layui-icon">&#xe67c;</i>导入职工
+						</button>
+					</div>
+					<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
+					<div class="layui-inline btn">
+						<button class="layui-btn layui-btn-danger" @click="exportExcel">
+							<i class="layui-icon layui-icon-senior"></i>
+							导出模板
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<script src="../../../layuiadmin/plugin/vue.js"></script>
+	<script src="../../../layuiadmin/plugin/axios.js"></script>
+	<script src="../../../layuiadmin/js/baseUrlConfig.js"></script>
+	<script>
+		layui.config({
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'table', 'laydate', 'form', 'upload'], function () {
+			var table = layui.table,
+				form = layui.form,
+				upload = layui.upload,
+				laydate = layui.laydate;
+			//时间日期
+			laydate.render({
+				elem: '#startDate',
+				format: 'yyyy-MM-dd'
+			});
+			laydate.render({
+				elem: '#endDate',
+				format: 'yyyy-MM-dd'
+			});
+
+			table.render({
+				elem: '#LAY-app-content-list'
+				, height: 480 //容器高度
+				, url: layui.setter.BASEURL + 'kindergarten/employeeinfo/list' //数据接口
+				, page: true
+				, parseData: function (res) { // 数据重新处理为layUI的数据格式
+					var msg = {
+						"code": res.code, //解析接口状态
+						"msg": res.msg, //解析提示文本
+						"count": res.page.totalCount, //解析数据长度
+						"data": res.page.list //解析数据列表
+					};
+					return msg;
+				}
+				, cols: [[
+					{ checkbox: true },
+					{ title: '序号', type: 'numbers', minWidth: 100 },
+					{ title: '姓名', field: 'name', minWidth: 100 },
+					// { title: '昵称', field: 'displayname', minWidth: 100 },
+					{ title: '性别', field: 'gender', minWidth: 100 },
+					// { title: '社保号', field: 'socialid', minWidth: 100 },
+					{ title: '出生日期', field: 'birthday', minWidth: 100 },
+					{ title: '民族', field: 'nationality', minWidth: 100 },
+					// { title: '籍贯', field: 'originplace', minWidth: 100 },
+					// { title: '', field: 'ethnic', minWidth: 100 },
+					{ title: '婚姻状况', field: 'marriage', minWidth: 100 },
+					{ title: '学历', field: 'education', minWidth: 100 },
+					{ title: '手机号', field: 'mobilephone', minWidth: 100 },
+					{ title: '固话号码', field: 'telephone', minWidth: 100 },
+					// { title: '地址', field: 'address', minWidth: 100 },
+					// { title: '头像', field: 'picture', minWidth: 100 },
+					{ title: '备注', field: 'memo', minWidth: 100 },
+					{ title: '考勤工号', field: 'workid', minWidth: 100 },
+					{ title: '角色', field: 'workgroupsysno', minWidth: 100 },
+					{ title: '入职日期', field: 'indate', minWidth: 100 },
+					{ title: '工作状态', field: 'workstatus', minWidth: 100 },
+					{ title: '是否招生老师', field: 'workduty', minWidth: 100 },
+					{ title: '职称', field: 'worktitle', minWidth: 100 },
+					{ title: '级别', field: 'workrank', minWidth: 100 },
+					{ title: '证书', field: 'certification', minWidth: 100 },
+					{ title: '幼儿园编码', field: 'kindergartensysno', minWidth: 100 }]] //设置表头
+				, limit: 10
+				, limits: [10, 15, 20, 25, 30]
+				, done: function (res, page, count) {
+					$("[data-field='gender']").children().each(function () {
+						if ($(this).text() == '0') {
+							$(this).text("男")
+						} else if ($(this).text() == '1') {
+							$(this).text("女")
+						}
+					});
+					$("[data-field='workstatus']").children().each(function () {
+						if ($(this).text() == '0') {
+							$(this).text("离职")
+						} else if ($(this).text() == '1') {
+							$(this).text("在职")
+						}
+					})
+					$("[data-field='workduty']").children().each(function () {
+						if ($(this).text() == '0') {
+							$(this).text("否")
+						} else if ($(this).text() == '1') {
+							$(this).text("是")
+						}
+					})
+				}
+			});
+
+
+			// 角色填充
+			axios({
+				method: "post",
+				url: BASEURL + 'kindergarten/employeegroupenum/list?limit=10000'
+			}).then(function (res) {
+				if (res.data.code == 0) {
+					console.log(res)
+					$.each(res.data.page.list, function (index, item) {
+						// // console.log(index, item)
+						$('#workgroupsysno').append(new Option(item.enumname, item.sysno));// 下拉菜单里添加元素
+					});
+					layui.form.render("select");
+
+				} else {
+
+				}
+			}).catch(function (err) {
+				// console.log(err);
+			});
+			//监听搜索
+			form.on('submit(LAY-app-contlist-search)', function (data) {
+				var field = data.field;
+				data.field.kindergartensysno = "0001";
+				//执行重载
+				table.reload('LAY-app-content-list', {
+					where: field
+				});
+			});
+
+			// 导入职工数据
+			var uploadInst = upload.render({
+				elem: '#saveExcel' //绑定元素
+				, url: layui.setter.BASEURL + 'kindergarten/employeeinfo/saveExcel' //上传接口
+				, accept: 'file'
+				, done: function (res) {
+					console.log(res);
+					if (res.code == 0) {
+						layer.msg('导入数据成功');
+						table.reload('LAY-app-content-list');
+					} else {
+						layer.msg('导入数据失败');
+					}
+
+					//上传完毕回调
+				}
+				, error: function () {
+					//请求异常回调
+				}
+			});
+
+			var $ = layui.$,
+				active = {
+					batchdel: function () {
+						var checkStatus = table.checkStatus('LAY-app-content-list'),
+							checkData = checkStatus.data; //得到选中的数据
+
+						var idList = [];
+						for (var i = 0; i < checkData.length; i++) {
+							idList.push(checkData[i].sysno)
+						}
+						if (checkData.length === 0) {
+							return layer.msg('请选择数据');
+						}
+
+						layer.confirm('确定删除吗？', function (index) {
+
+							axios({
+								method: "post",
+								url: layui.setter.BASEURL + 'kindergarten/employeeinfo/delete',
+								data: {
+									sysnos: idList
+								},
+								headers: {
+									"Content-Type": "application/json;charset=UTF-8"
+								}
+							}).then(function (res) {
+								if (res.data.code == 0) {
+									// // console.log(res)
+									table.reload('LAY-app-content-list');
+									layer.msg('已删除');
+
+								} else {
+									layer.msg('删除失败!');
+								}
+							}).catch(function (err) {
+								// // console.log(err);
+							});
+						});
+					},
+					add: function () {
+						layer.open({
+							type: 2,
+							title: '添加职工',
+							content: 'employeeinfoAdd.html',
+							maxmin: true,
+							area: ['550px', '550px']
+						});
+					},
+					edit: function () {
+						var checkStatus = table.checkStatus('LAY-app-content-list'),
+							checkData = checkStatus.data; //得到选中的数据
+						// // console.log(checkData)
+						if (checkData.length === 0) {
+							return layer.msg('请选择需要修改的数据');
+						} else if (checkData.length > 1) {
+							return layer.msg('只能选择单条数据进行编辑');
+						}
+						// 获取行数据的id传值至弹窗页面
+						window.id = checkData[0].sysno;
+						layer.open({
+							type: 2,
+							title: '编辑职工',
+							content: 'employeeinfoEdit.html',
+							maxmin: true,
+							area: ['600px', '550px']
+						});
+					}
+				};
+
+			$('.layui-btn.layuiadmin-btn-list').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
+		});
+
+		var vm = new Vue({
+			el: "#vm",
+			data: {},
+			methods: {
+				// 导出模板
+				exportExcel() {
+					location =
+						BASEURL +
+						"kindergarten/employeeinfo/exportExcel?" +
+						"kindergartensysno=" + 1;
+				}
+			},
+			created() {
+
+			}
+		})
+	</script>
+</body>
+
+</html>

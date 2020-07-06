@@ -1,0 +1,128 @@
+.food-table {
+	width: 100%;
+	background-color: #fff;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+.food-table .food-thead {
+	font-size: 16px;
+}
+
+.t-c {
+	text-align: center;
+}
+
+.food-table .food-thead .headline {
+	width: 120px;
+	min-width: 120px;
+	background-color: #2F9688;
+}
+
+.food-table .food-thead td {
+	min-height: 80px;
+}
+
+.food-table td,
+.food-table th {
+	border: 1px solid #e4e4e4;
+}
+
+.food-table .food-thead td {
+	min-height: 80px;
+}
+
+.food-table td,
+.food-table th {
+	border: 1px solid #e4e4e4;
+}
+
+.thead--td-bg {
+	background-color: #2F9688;
+	color: #fff;
+}
+
+.food-table .food-thead .headline .period {
+	position: absolute;
+	font-size: 14px;
+	right: 9px;
+	top: 9px;
+	font-size: 16px;
+	color: #fff;
+}
+
+.food-table .food-thead .headline .line {
+	position: absolute;
+	width: 145px;
+	border: 1px solid #fff;
+	left: -14px;
+	top: 39px;
+	z-index: 0;
+	transform: rotate(34deg);
+}
+
+.food-table .food-thead .headline .date {
+	position: absolute;
+	font-size: 14px;
+	left: 9px;
+	top: 45px;
+	font-size: 16px;
+	color: #fff;
+}
+
+.week-body .el-textarea .el-textarea__inner {
+	border: none;
+	resize: none;
+}
+
+.el-textarea__inner {
+	display: block;
+	resize: vertical;
+	padding: 5px 15px;
+	line-height: 1.5;
+	box-sizing: border-box;
+	width: 100%;
+	font-size: inherit;
+	color: #606266;
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #dcdfe6;
+	border-radius: 4px;
+	transition: border-color .2s cubic-bezier(.645, .045, .355, 1);
+}
+
+.btn-week {
+	text-align: right;
+}
+
+.file {
+	position: relative;
+	display: inline-block;
+	background: #D0EEFF;
+	border: 1px solid #99D3F5;
+	/* border-radius: 4px; */
+	padding: 0px 18px;
+	/* overflow: hidden; */
+	color: #1E88C7;
+	text-decoration: none;
+	text-indent: 0;
+	line-height: 34px;
+	height: 36px;
+}
+
+.file input {
+	position: absolute;
+	/* font-size: 100px; */
+	right: 0;
+	top: 0;
+	opacity: 0;
+}
+
+.file:hover {
+	background: #AADFFD;
+	border-color: #78C3F3;
+	color: #004974;
+	text-decoration: none;
+}

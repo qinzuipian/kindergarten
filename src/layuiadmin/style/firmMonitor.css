@@ -1,0 +1,119 @@
+.firmMain {
+    /* width: 100%; */
+    padding: 10px;
+}
+.firmRight,.firmLeft {
+    /* float: left; */
+    box-shadow:0 1px 5px 0px rgba(67,101,133,0.2);
+}
+.firmLeft {
+    width: 26%;
+    height: 100%;
+    float:left;
+    /* border: 1px solid #000; */
+    /* box-shadow:0 1px 5px 0px rgba(67,101,133,0.2); */
+    
+}
+
+.firmLeft .title {
+    width: 100%;
+    height: 46px;
+    background-color: #23c6c8;
+}
+.firmRight {
+    width: 68%;
+    /* border: 1px solid #000; */
+    margin-right: 10px;
+    float: right;
+    padding: 10px;
+}
+.firmRight .title {
+    width: 99%;
+    height: 46px;
+    line-height: 46px;
+    border-top: 1px solid #23c6c8;
+    border-bottom: 1px solid #23c6c8;
+    padding: 6px;
+}
+.firmRight .title button {
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 18px;
+    background-color: #23c6c8;  
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    color:#fff;
+    /* border-radius: 4px; */
+}
+.firmRight .title .active {
+    background-color: #fff;
+    color: gray;
+   
+}
+.firmRight .rightContent,.firmLeft .leftContent {
+    padding: 10px;
+    background-color: #fff;
+}
+.firmRight .rightContent h2{
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+.firmRight .rightContent .firmTable table td{
+    border: 1px solid #eee;
+
+}
+.firmRight .rightContent .firmTable table tr td:nth-child(1) ,
+.firmRight .rightContent .firmTable table tr td:nth-child(3) {
+    width: 100px;
+    height: 28px;
+    line-height: 28px;
+    text-align: center;
+    background-color: #E0E5EC;
+
+}
+.firmRight .rightContent .firmTable table tr td:nth-child(2) ,
+.firmRight .rightContent .firmTable table tr td:nth-child(4) {
+    padding:8px; 
+
+}
+.firmRight .rightContent .monitorTable p{
+    border-top: 1px solid #23C6C8;
+    border-bottom: 1px solid #23C6C8;
+    color: #23C6C8;
+    padding: 10px;
+    margin-top: 10px;
+
+}
+.firmRight .rightContent .layui-badge {
+    height: 22px;
+    
+}
+.firmRight .rightContent .layui-card-header .layui-icon {
+    font-size: 20px;
+    font-weight: 700;
+}
+.firmRight .rightContent .blue {
+    border: 1px solid #1E9FFF;
+}
+.firmRight .rightContent .blue .layui-card-header {
+    border-bottom: 1px solid #1E9FFF;
+}
+.firmRight .rightContent .green {
+    border: 1px solid #2F4056;
+}
+.firmRight .rightContent .green .layui-card-header {
+    border-bottom: 1px solid #2F4056;
+}
+.firmRight .rightContent .yellow {
+    border: 1px solid #009688;
+}
+.firmRight .rightContent .yellow .layui-card-header {
+    border-bottom: 1px solid #009688;
+}

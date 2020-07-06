@@ -1,0 +1,33 @@
+@charset "utf-8";
+
+.card-title{
+	background: #23c6c8;
+	color: white;
+}
+.user-list-box{
+	padding-left: 20px;
+}
+.user-item{
+	line-height: 45px;
+}
+.enterprise-list-box{
+	padding-left: 20px;
+	display: flex;
+	justify-content: flex-start;
+	align-items: center;
+	flex-wrap: wrap;
+}
+.enterprise-item{
+	width: 33%;
+	line-height: 45px;
+}
+
+.user-list-radio,.user-list-checkbox{
+	line-height: 30px;
+	
+}
+
+.submit-btn{
+	margin: 20px;
+	
+}

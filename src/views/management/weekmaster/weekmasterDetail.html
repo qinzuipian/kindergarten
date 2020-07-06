@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>周计划详情</title>
+    <link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+    <link rel="stylesheet" href="../../../layuiadmin/style/common.css">
+    <link rel="stylesheet" href="../../../layuiadmin/style/weekmasterDetail.css">
+</head>
+
+<body>
+    <div id="vm">
+        <div class="layui-fluid">
+            <div class="layui-card">
+                <div class="layui-form layui-card-header layuiadmin-card-header-auto">
+                    <div class="layui-form-item">
+                        <span>周计划详情</span>
+                    </div>
+                </div>
+                <div class="layui-card-body">
+                    <form class="layui-form" action="">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">发布格式</label>
+                            <div class="layui-input-inline">
+                                <input type="radio" name="sex" lay-filter="weekDetail" value="0" title="文字版" checked>
+                                <input type="radio" name="sex" lay-filter="weekDetail" value="1" title="图片版">
+                            </div>
+
+                            <div class="btn-week">
+                                <button class="layui-btn layuiadmin-btn-list layui-bg-green" data-type="add">
+                                    <i class="layui-icon">&#xe654;</i>复制周计划
+                                </button>
+                                <a href="javascript:;" class="file">
+                                    <i class="layui-icon layui-icon-link"></i>
+                                    导入周计划
+                                    <input type="file" id="upload_excel"></input>
+                                </a>
+
+                                <button class="layui-btn layuiadmin-btn-list layui-bg-red" data-type="batchdel">
+                                    <i class="layui-icon">&#xe63b;</i>保存
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                    <div id="fontShow">
+                        <table border="1" cellspacing="0" cellpadding="0" class="food-table">
+                            <thead class="food-thead t-c">
+                                <tr>
+                                    <td class="headline">
+                                        <div style="height: 80px; position: relative;"><span class="period">时间</span>
+                                            <span class="line"></span> <span class="date">星期</span></div>
+                                    </td>
+                                    <td class="thead--td-bg">上午</td>
+                                    <td class="thead--td-bg">下午</td>
+                                </tr>
+                            </thead>
+                            <tbody class="food-tbody week-body">
+                                <tr v-for="(item,index) in result" :key="index">
+                                    <td class="t-c">
+                                        {{item.date}}
+                                    </td>
+                                    <td>
+                                        <div class="el-textarea el-input--medium"><textarea autocomplete="off" rows="4"
+                                                class="el-textarea__inner"
+                                                style="min-height: 31px;">{{item.name}}</textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="el-textarea el-input--medium"><textarea autocomplete="off" rows="4"
+                                                class="el-textarea__inner"
+                                                style="min-height: 31px;">{{item.code}}</textarea></div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="imgShow" style="display: none;">222</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../../layuiadmin/layui/layui.js"></script>
+    <script src="../../../layuiadmin/lib/xslx.min.js"></script>
+    <script src="../../../layuiadmin/plugin/vue.js"></script>
+    <script src="../../../layuiadmin/plugin/axios.js"></script>
+    <script src="../../../layuiadmin/js/baseUrlConfig.js"></script>
+
+    <script>
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'table', 'form', 'jquery'], function () {
+            var table = layui.table,
+                form = layui.form,
+                $ = layui.jquery;
+
+
+            // excel文件上传
+            $('#upload_excel').change(function (e) {
+                var files = e.target.files;
+                var fileReader = new FileReader();
+                var excle = $("#upload_excel").val();
+                if (excle == null) {
+                    alert("未选择Excel文件");
+                } else {
+                    // 判断是否是Excel格式
+                    if (excle != '') {
+                        //文件名可以带空格
+                        var reg = /^.*\.(?:xls|xlsx)$/i;
+                        //校验不通过
+                        if (!reg.test(excle)) {
+                            alert("请上传excel格式的文件!");
+                            return;
+                        } else {
+                            fileReader.onload = function (ev) {
+                                try {
+                                    var data = ev.target.result,
+                                        workbook = XLSX.read(data, {
+                                            type: 'binary'
+                                        }), // 以二进制流方式读取得到整份excel表格对象
+                                        persons = []; // 存储获取到的数据
+                                } catch (e) {
+                                    alert('文件类型不正确');
+                                    return;
+                                }
+
+                                // 表格的表格范围，可用于判断表头是否数量是否正确
+                                var fromTo = '';
+                                var weekResult = [];
+                                // 遍历每张表读取
+                                for (var sheet in workbook.Sheets) {
+                                    if (workbook.Sheets.hasOwnProperty(sheet)) {
+                                        fromTo = workbook.Sheets[sheet]['!ref'];
+                                        persons = persons.concat(XLSX.utils.sheet_to_json(workbook.Sheets[sheet]));
+                                        // console.log(persons)
+                                    }
+                                }
+                                if (persons.length > 10000) {
+                                    alert("Excel长度超过10000条，不能使用");
+                                } else {
+                                    // _Result = persons;
+                                    var id = "";
+                                    if (persons.length == 0) {
+                                        alert("导入Excel中无数据");
+                                    } else {
+                                        for (var i = 2; i < persons.length; i++) {
+                                            // console.log(persons[i]);
+                                            weekResult.push(persons[i]);
+                                        }
+                                        // console.log(weekResult)
+                                        let c = weekResult.map((item, index, arr) => {
+                                            let obj = {};
+                                            obj['name'] = item[""];
+                                            obj['code'] = item['_1'];
+                                            obj['date'] = item['一班周计划(2020-05-11至2020-05-17(第3周))'];
+                                            return obj;
+                                        })
+                                        console.log(c)
+                                        vm.result = c;
+                                        // console.log(vm.result);
+                                        //  添加在页面表格中（添加代码就不举例说明了）
+                                    }
+                                }
+                            };
+                        }
+                    }
+                }
+                // 以二进制方式打开文件
+                fileReader.readAsBinaryString(files[0]);
+                // 清空input 值 避免选择同名字的excel 文件不执行
+                $("#upload_excel").val("")
+            });
+
+
+            form.on('radio(weekDetail)', function (data) {
+                if (data.value == 1) {
+                    $("#imgShow").show();
+                    $("#fontShow").hide();
+                } else {
+                    $("#imgShow").hide();
+                    $("#fontShow").show();
+                }
+            })
+        });
+
+
+        var vm = new Vue({
+            el: "#vm",
+            data: {
+                result: []
+            },
+            methods: {
+            }
+        });
+    </script>
+</body>
+
+</html>

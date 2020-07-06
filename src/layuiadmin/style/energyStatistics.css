@@ -1,0 +1,139 @@
+.energyMain {
+    padding: 10px;
+}
+
+.head {
+    border-top: 1px solid #23C6C8;
+    border-bottom: 1px solid #23C6C8;
+    padding: 6px;
+}
+
+.head .active,
+.warm-btn .active,
+.btn-radius .active,
+.shopLine .active,
+.shopThree .active {
+    background-color: #fff;
+    color: gray;
+}
+
+.head button {
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 18px;
+    background-color: #23c6c8;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+    color: #fff;
+    /* border-radius: 4px; */
+}
+
+.mainContent .title {
+    padding: 6px;
+    height: 50px;
+    line-height: 50px;
+    background-color: rgba(35, 198, 200, 0.4);
+}
+
+.mainContent .title .layui-icon-note,
+.mainContent .title .layui-icon-component,
+.mainContent .title .layui-icon-location {
+    font-size: 20px;
+    font-weight: 700;
+    margin-right: 6px;
+}
+
+.mainContent .bottomContent {
+    /* width: 100%; */
+    padding: 10px;
+}
+
+.mainContent .bottomContent .left {
+    width: 30%;
+    float: left;
+}
+
+.mainContent .bottomContent .right {
+    width: 70%;
+    float: left;
+}
+
+.layui-card {
+    width: 260px;
+}
+
+.layuiadmin-span-color {
+    top: 0;
+}
+
+.layui-col-md12,
+.layui-col-md4 {
+    margin-bottom: 6px;
+}
+
+.layui-col-md4 .layui-card {
+    width: 140px;
+    height: 100px;
+}
+
+.layuiadmin-card-list {
+    padding: 8px;
+}
+
+.layui-card-header {
+    height: 36px;
+    line-height: 36px;
+}
+
+.layuiadmin-card-list span.layuiadmin-big-font {
+    font-size: 28px;
+    padding: 0;
+}
+
+h3 {
+    font-weight: 700;
+    color: #000;
+    margin-bottom: 8px;
+}
+
+.rowline {
+    border-top: 2px solid #4488BB;
+    padding-top: 10px;
+}
+
+.warm-btn button,
+.btn-radius button,
+.shopLine button {
+    cursor: pointer;
+}
+
+.warm-btn {
+    /* float: right; */
+    position: absolute;
+    z-index: 999;
+    top: 0;
+    right: 0;
+}
+
+.btn-radius {
+    position: absolute;
+    z-index: 999;
+    left: 50%;
+    /* top: 10%; */
+}
+.shopLine  {
+    text-align: center;
+}
+.shopThree {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+.btn-radius .layui-btn+.layui-btn {
+    margin: 0;
+}

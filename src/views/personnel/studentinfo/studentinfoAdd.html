@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+	<head>
+		<meta charset="UTF-8">
+		<title>新增</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+		<link rel="stylesheet" type="text/css" href="../../../layuiadmin/layui/css/layui.css" />
+		<link rel="stylesheet" href="../../../layuiadmin/style/common.css">
+		<script src="../../../layuiadmin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入vue -->
+		<script src="../../../layuiadmin/plugin/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../layuiadmin/plugin/axios.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../layuiadmin/js/baseUrlConfig.js"></script>
+		<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+		<!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    
+    <![endif]-->
+		<style>
+			.factor{
+			display: flex;
+			flex-wrap:wrap;
+		}
+		.factor span{
+			line-height: 2.5rem;
+			margin-left: 10px;
+		}
+		.close{
+			line-height: 2.5rem;
+			margin-right: 10px;	
+			color: #F00;
+		}
+		.layui-icon-edit,.close {
+			cursor: pointer;
+			font-size: 18px;
+		}
+		.layui-icon-edit {
+			color: #00FF00;
+		}
+		.box{
+			background: gainsboro;
+			margin-right: 10px;
+			margin-top: 0.625rem;			
+		}
+	</style>
+	</head>
+
+	<body>
+		<div id="vm">
+			<div class="layui-fluid">
+				<div class="layui-row">
+					<form class="layui-form">
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								宝贝姓名</label>
+							<div class="layui-input-inline">
+								<input type="text" name="name" class="layui-input" placeholder="姓名" />
+							</div>
+						</div>
+						<!--   <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            昵称</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="displayname" class="layui-input" placeholder="昵称" />
+                        </div>
+                    </div> -->
+						<!--   <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            曾用名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="formername" class="layui-input" placeholder="曾用名" />
+                        </div>
+                    </div> -->
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								性别</label>
+							<div class="layui-input-inline">
+								<input type="radio" name="gender" value="0" title="男">
+								<input type="radio" name="gender" value="1" title="女" checked>
+								<!-- <input type="text" name="gender" class="layui-input" placeholder="性别" /> -->
+							</div>
+						</div>
+
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								出生日期</label>
+							<div class="layui-input-inline">
+								<input type="text" name="birthday" id="birthday" class="layui-input" placeholder="出生日期" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								入园日期</label>
+							<div class="layui-input-inline">
+								<input type="text" name="indate" id="indate" class="layui-input" placeholder="入园日期" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								考勤编码</label>
+							<div class="layui-input-inline">
+								<input type="text" name="studentid" class="layui-input" placeholder="考勤编码" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								在校状态</label>
+							<div class="layui-input-inline">
+								<!-- <input type="text" name="valid" class="layui-input" placeholder="在校状态：0 离园 1 在园" /> -->
+								<select name="valid">
+									<option value="">请选择在校状态</option>
+									<option value="0">离园</option>
+									<option value="1">在园</option>
+								</select>
+							</div>
+						</div>
+						<!--  <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            家长姓名</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="relativeName" class="layui-input" placeholder="家长姓名" />
+                        </div>
+                    </div> -->
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								住址</label>
+							<div class="layui-input-inline">
+								<input type="text" name="residenceplace" class="layui-input" placeholder="住址" />
+							</div>
+						</div>
+						<!--   <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            住址类型</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="residencetype" class="layui-input" placeholder="住址类型" />
+                        </div>
+                    </div> -->
+						<!--  <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            国籍</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="nationality" class="layui-input" placeholder="国籍" />
+                        </div>
+                    </div> -->
+						<!--  <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            籍贯</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="originplace" class="layui-input" placeholder="籍贯" />
+                        </div>
+                    </div> -->
+						<!--   <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            民族</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="ethnic" class="layui-input" placeholder="民族" />
+                        </div>
+                    </div> -->
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								所在班级</label>
+							<div class="layui-input-inline">
+								<select name="classsysno" id="classsysno" lay-filter="classsysno" lay-verify="required">
+									<option value="">请选择班级</option>
+									<option value=""></option>
+								</select>
+								<!-- <input type="text" name="classsysno" class="layui-input" placeholder="所在班级" /> -->
+							</div>
+						</div>
+
+						<!-- 联系人 -->
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								联系人</label>
+							<div class="layui-input-inline">
+								<button class="layui-btn layuiadmin-btn-list" type="button" data-type="addPeople">新增宝贝联系人</button>
+							</div>
+						</div>
+
+						<div class="layui-form-item" v-show="familyShow == 1">
+							<label for="bitian" class="layui-form-label">联系人列表</label>
+							<div>
+								<div class="factor">
+									<div id="box" class="box" v-for="(it,index) in familyData">
+										<span id="name" v-text="it.name"></span>
+										<i class="layui-icon layui-icon-edit" @click="familyEdit(it,index)"></i>
+										<i class="layui-icon layui-icon-close  close" @click="familyDelete(it,index)"></i>
+									</div>
+
+								</div>
+							</div>
+						</div>
+
+
+						<!--  <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            类型</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="studenttype" class="layui-input" placeholder="类型" />
+                        </div>
+                    </div> -->
+						<!-- <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            地址</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="address" class="layui-input" placeholder="地址" />
+                        </div>
+                    </div> -->
+
+						<!--  <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            头像</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="picture" class="layui-input" placeholder="头像" />
+                        </div>
+                    </div> -->
+						<!--  <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            兴趣</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="interest" class="layui-input" placeholder="兴趣" />
+                        </div>
+                    </div> -->
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								床号</label>
+							<div class="layui-input-inline">
+								<input type="text" name="bednumber" class="layui-input" placeholder="床号" />
+							</div>
+						</div>
+						<div class="layui-form-item">
+							<label for="bitian" class="layui-form-label">
+								备注</label>
+							<div class="layui-input-inline">
+								<input type="text" name="memo" class="layui-input" placeholder="备注" />
+							</div>
+						</div>
+
+						<!--     <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            幼儿园编码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="kindergartensysno" class="layui-input" placeholder="幼儿园编码" />
+                        </div>
+                    </div> -->
+						<div class="btn-box">
+							<button class="layui-btn layui-bg-green" lay-submit lay-filter="save">保存</button>
+							<button class="layui-btn layui-bg-red" @click="cancel">取消</button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+		</div>
+		<script>
+			layui.config({
+				base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', "jquery", 'form', 'laydate', 'layer'], function() {
+				var form = layui.form,
+					$ = layui.jquery,
+					laydate = layui.laydate,
+					layer = layui.layer;
+
+
+				// 出生日期
+				laydate.render({
+					elem: '#birthday', //指定元素
+					trigger: 'click'
+				});
+				// 入院日期
+				laydate.render({
+					elem: '#indate', //指定元素
+					trigger: 'click'
+				});
+				// 班级编码填充
+				axios({
+					method: "post",
+					url: BASEURL + 'kindergarten/classinfo/list?limit=10000'
+				}).then(function(res) {
+					if (res.data.code == 0) {
+						console.log(res)
+						$.each(res.data.page.list, function(index, item) {
+							// // console.log(index, item)
+							$('#classsysno').append(new Option(item.classname, item.sysno)); // 下拉菜单里添加元素
+						});
+						layui.form.render("select");
+
+					} else {
+
+					}
+				}).catch(function(err) {
+					// console.log(err);
+				});
+
+				form.on('submit(save)', function(data) {
+					console.log(data.field)
+					data.field.kindergartensysno = localStorage.getItem('kindergartensysno');
+					data.field.relativeinfoList = vm.familyData;
+					axios({
+						method: "post",
+						url: layui.setter.BASEURL + 'kindergarten/studentinfo/save',
+						data: data.field,
+						headers: {
+							"Content-Type": "application/json;charset=UTF-8"
+						}
+					}).then(function(res) {
+						// // console.log(res)
+						if (res.data.code == 0) {
+							layer.msg('保存成功！', {
+								time: 500
+							}, function() {
+								/* window.parent.location.reload();
+								parent.layer.close('iframe'); */
+							});
+						} else {
+							layer.msg(res.data.msg, {
+								time: 1000
+							}, function() {
+								parent.layer.close('iframe');
+							});
+						}
+					}).catch(function(err) {
+						// console.log(err);
+					});
+					return false;
+				})
+				active = {
+					addPeople: function() {
+						var data = {};
+						data.shipFlag = 1;
+						window.data = data;
+						layer.open({
+							type: 2,
+							title: '添加宝贝联系人',
+							content: 'addFamily.html',
+							maxmin: true,
+							area: ['550px', '400px'],
+							success: function(layero, index) {
+								var body = layer.getChildFrame('body', index);
+								var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+								var data = {};
+								body.find("#save").click(function() {
+									$(window.frames[0].document).find("#familyFrom").serializeArray().forEach(function(item) {
+										data[item.name] = item.value;
+									});
+									if (data.name != "" && data.mobilephone != "" && data.relationshipsysno != "") {
+										vm.familyData.push(data);
+										vm.familyShow = 1;
+									}
+									console.log(vm.familyData);
+								})
+
+
+
+							}
+						});
+					}
+				};
+
+				$('.layui-btn.layuiadmin-btn-list').on('click', function() {
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+
+			})
+			var vm = new Vue({
+				el: "#vm",
+				data: {
+					studentinfo: {},
+					familyData: [],
+					familyShow: 0
+				},
+				methods: {
+					cancel: function() {
+						parent.layer.closeAll('iframe'); //关闭弹窗
+					},
+					familyEdit: function(it, index) {
+						console.log(it, index);
+						window.data = it;
+						layer.open({
+							type: 2,
+							title: '编辑宝贝联系人',
+							content: 'editFamily.html',
+							maxmin: true,
+							area: ['550px', '400px'],
+							success: function(layero, index) {
+								var body = layer.getChildFrame('body', index);
+								var iframeWin = window[layero.find('iframe')[0]['name']]; //得到iframe页的窗口对象，执行iframe页的方法：iframeWin.method();
+								var data = {};
+								body.find("#save").click(function() {
+									layui.$(window.frames[0].document).find("#familyFrom").serializeArray().forEach(function(item) {
+										data[item.name] = item.value;
+									});
+									if (data.name != "" && data.mobilephone != "" && data.relationshipsysno != "") {
+										it.name = data.name;
+										it.gender = data.gender;
+										it.memo = data.memo;
+										it.mobilephone = data.mobilephone;
+										it.relationshipsysno = data.relationshipsysno;
+										it.smvalid = data.smvalid;
+										vm.familyShow = 1;
+									}
+								})
+							}
+						});
+					},
+					familyDelete: function(it, index) {
+						for (var i = 0; i < this.familyData.length; i++) {
+							if (index == i) {
+								this.familyData.splice(i, 1);
+							}
+						}
+						if (this.familyData.length == 0) {
+							vm.familyShow = 0;
+						}
+					},
+				}
+			});
+		</script>
+	</body>
+
+</html>

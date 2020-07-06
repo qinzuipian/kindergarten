@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>宝贝体温</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" media="all" href="../../../layuiadmin/layui/css/layui.css" />
+		<link rel="stylesheet" media="all" href="../../../layuiadmin/style/admin.css" />
+	</head>
+
+	<body>
+		<div id="vm">
+			<div class="layui-fluid">
+				<div class="layui-card">
+					<div class="layui-form layui-card-header layuiadmin-card-header-auto">
+						<div class="layui-form-item">
+						<!-- 	<div class="layui-inline">
+								<label class="layui-form-label">宝贝姓名</label>
+								<div class="layui-input-inline">
+									<input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+								</div>
+							</div> -->
+							<div class="layui-inline">
+								<label class="layui-form-label">测量日期</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="startDate" name="startRectime" placeholder="请输入开始日期">
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="endDate" name="endRectime" placeholder="请输入结束日期">
+								</div>
+							</div>
+						<!-- 	<div class="layui-inline">
+								<label class="layui-form-label">所在班级</label>
+								<div class="layui-input-inline">
+									<select name="classname" id="classsysno" lay-filter="classsysno">
+										<option value="">请选择班级</option>
+										<option value=""></option>
+									</select>
+								</div>
+							</div> -->
+
+							<div class="layui-inline">
+								<button class="layui-btn layuiadmin-btn-list" lay-submit lay-filter="LAY-app-contlist-search">
+									<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+								</button>
+							</div>
+						</div>
+					</div>
+					<div class="layui-card-body">
+						<table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table>
+					</div>
+
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../layuiadmin/plugin/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../../layuiadmin/plugin/axios.js" type="text/javascript" charset="utf-8"></script>
+		<!-- <script src="../../../layuiadmin/plugin/echarts.min.js"></script> -->
+		<script src="../../../layuiadmin/js/baseUrlConfig.js"></script>
+		<script>
+			layui.config({
+				base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'table', 'laydate', 'echarts'], function() {
+				var table = layui.table,
+					form = layui.form,
+					laydate = layui.laydate,
+					echarts = layui.echarts;
+				//时间日期
+				laydate.render({
+					elem: '#startDate',
+					format: 'yyyy-MM-dd'
+				});
+				laydate.render({
+					elem: '#endDate',
+					format: 'yyyy-MM-dd'
+				});
+
+
+			
+				table.render({
+					elem: '#LAY-app-content-list',
+					height: 500 //容器高度
+						,
+					url: layui.setter.BASEURL + 'kindergarten/devicetemp/list' //数据接口
+						,
+					page: true,
+					where:{
+						deviceno:parent.deviceno,
+						kindergartensysno:localStorage.getItem('kindergartensysno')
+					},
+					parseData: function(res) { // 数据重新处理为layUI的数据格式
+						var msg = {
+							"code": res.code, //解析接口状态
+							"msg": res.msg, //解析提示文本
+							"count": res.page.totalCount, //解析数据长度
+							"data": res.page.list //解析数据列表
+						};
+						return msg;
+					},
+					cols: [
+							[{
+									type: 'numbers',
+									minWidth: 40,
+									width: 50
+								},
+								{
+									title: '宝贝姓名',
+									field: 'name',
+									minWidth: 200
+
+								},
+								/* {
+									title: '年级编码',
+									field: 'gradesysno',
+									minWidth: 100
+
+								}, */
+								{
+									title: '所在班级',
+									field: 'className',
+									minWidth: 100
+
+								}, {
+									title: '出入方向',
+									field: 'direction',
+									minWidth: 100
+
+								}, {
+									title: '体温',
+									field: 'temperature',
+									Width: 30
+
+								},
+								{
+									title: '测量日期',
+									field: 'rectime',
+									minWidth: 60
+
+								}
+								/* , {
+									title: '操作',
+									minWidth: 100,
+									toolbar: '#barDemo'
+
+								} */
+							]
+						] //设置表头
+						,
+					limit: 10,
+					limits: [15, 30, 50, 100, 200],
+					done: function(res, page, count) {
+						$("[data-field='direction']").children().each(function() {
+							if ($(this).text() == '1') {
+								$(this).text("进门")
+							} else if ($(this).text() == '0') {
+								$(this).text("出门")
+							}
+						})
+					}
+				});
+				table.on('sort(LAY-app-content-list)', function(obj) {
+					// console.log(obj)
+					$("[data-field='direction']").children().each(function() {
+						if ($(this).text() == '1') {
+							$(this).text("进门")
+						} else if ($(this).text() == '0') {
+							$(this).text("出门")
+						}
+					})
+				});
+				table.on('tool(LAY-app-content-list)', function(obj) {
+					var data = obj.data;
+					if (obj.event === 'detail') {
+						window.id = data.id;
+						layer.open({
+							type: 2,
+							title: '实时数据',
+							content: 'tdeviceequipstatusDeatil.html',
+							maxmin: true,
+							area: ['1050px', '450px']
+
+						});
+					}
+				});
+
+
+				//监听搜索
+				form.on('submit(LAY-app-contlist-search)', function(data) {
+					var field = data.field;
+
+					//执行重载
+					table.reload('LAY-app-content-list', {
+						where: field,
+						page: {
+							curr: 1 //重新从第 1 页开始
+						}
+					});
+				});
+
+				// 班级编码填充
+				axios({
+					method: "post",
+					url: BASEURL + 'kindergarten/classinfo/list?limit=10000'
+				}).then(function(res) {
+					if (res.data.code == 0) {
+						$.each(res.data.page.list, function(index, item) {
+							// // console.log(index, item)
+							$('#classsysno').append(new Option(item.classname, item.classname)); // 下拉菜单里添加元素
+						});
+						layui.form.render("select");
+
+					} else {
+
+					}
+				}).catch(function(err) {
+					// console.log(err);
+				});
+				var $ = layui.$,
+					active = {
+						batchdel: function() {
+
+						},
+						del: function() {
+
+						},
+						edit: function() {
+
+						}
+					};
+
+				$('.layui-btn.layuiadmin-btn-list').on('click', function() {
+					var type = $(this).data('type');
+					active[type] ? active[type].call(this) : '';
+				});
+			});
+
+
+			var vm = new Vue({
+				el: "#vm",
+				data: {},
+				methods: {
+
+
+				},
+				mounted() {
+					// this.temperatureInit()
+
+				},
+				created() {
+
+				}
+			})
+		</script>
+	</body>
+
+</html>
+</body>
+
+</html>

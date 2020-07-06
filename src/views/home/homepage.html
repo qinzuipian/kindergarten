@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>首页</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" type="text/css" href="../../layuiadmin/plugin/element.css" />
+	<link rel="stylesheet" href="../../layuiadmin/style/admin.css" media="all">
+	<link rel="stylesheet" type="text/css" href="../../layuiadmin/style/common.css" />
+	<link rel="stylesheet" type="text/css" href="../../layuiadmin/style/home.css" />
+
+</head>
+
+<body>
+	<div id="vm">
+		<div class="layui-container content">
+			<div class="message-box">
+				<p>首页展示:</p>
+			</div>
+			<div class="homeMain">
+				<div class="layui-row">
+					<div class="layui-col-xs6">
+						<div class="grid-demo grid-demo-bg1">
+							<div id="studentCircle" style="width:100%; height: 400px;"></div>
+						</div>
+					</div>
+					<div class="layui-col-xs6">
+						<div class="grid-demo">
+							<div id="teacherCircle" style="width:100%; height: 400px;"></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+	</div>
+
+
+	<script src="../../layuiadmin/layui/layui.js"></script>
+	<script src="../../layuiadmin/js/baseUrlConfig.js"></script>
+	<script src="../../layuiadmin/plugin/vue.js"></script>
+	<script src="../../layuiadmin/plugin/element.js"></script>
+	<script src="../../layuiadmin/plugin/axios.js"></script>
+	<script>
+		layui.config({
+			base: '../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'table', 'echarts', 'form'], function () {
+			var table = layui.table,
+				form = layui.form,
+				echarts = layui.echarts;
+
+			// 学生考勤数据
+			// echarts图表的显示
+			var Chart = layui.echarts.init(document.getElementById('studentCircle'));
+			Chart.showLoading({
+				text: "加载中"
+			});
+			var option = {
+				title: {
+					text: '宝贝考勤',
+					x:"center",
+					y:"bottom"
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: '{a} <br/>{b} : {c} ({d}%)'
+				},
+				legend: {
+					orient: 'horizontal',
+					left: 'left',
+					data: ['在校', '校外']
+				},
+				series: [
+					{
+						name: '宝贝考勤',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: [
+							{ value: 234, name: '在校' },
+							{ value: 135, name: '校外' }
+						],
+						emphasis: {
+							itemStyle: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}
+				]
+			};
+			Chart.hideLoading();
+			Chart.setOption(option, true)
+			// 老师考勤数据
+			// echarts图表的显示
+			var Chart = layui.echarts.init(document.getElementById('teacherCircle'));
+			Chart.showLoading({
+				text: "加载中"
+			});
+			var option = {
+				title: {
+					text: '职工考勤',
+					x:"center",
+					y:"bottom"
+				},
+				tooltip: {
+					trigger: 'item',
+					formatter: '{a} <br/>{b} : {c} ({d}%)'
+				},
+				legend: {
+					orient: 'horizontal',
+					left: 'left',
+					data: ['在校', '请假']
+				},
+				series: [
+					{
+						name: '职工考勤',
+						type: 'pie',
+						radius: '55%',
+						center: ['50%', '60%'],
+						data: [
+							{ value: 335, name: '在校' },
+							{ value: 310, name: '请假' }
+						],
+						emphasis: {
+							itemStyle: {
+								shadowBlur: 10,
+								shadowOffsetX: 0,
+								shadowColor: 'rgba(0, 0, 0, 0.5)'
+							}
+						}
+					}
+				]
+			};
+			Chart.hideLoading();
+			Chart.setOption(option, true)
+		})
+		var vm = new Vue({
+			el: "#vm",
+			data: {
+				
+			},
+			methods: {
+
+			},
+			mounted: function () {
+			}
+		});
+	</script>
+</body>
+
+</html>

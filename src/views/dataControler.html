@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>幼儿园管理平台</title>
+		<link rel="stylesheet" type="text/css" href="../layuiadmin/style/dataControler.css" />
+	</head>
+	<body style="margin: 0;">
+		<div id="app">
+			<div>
+				<dv-full-screen-container>
+					<dv-loading v-show="!isReady">加载中...</dv-loading>
+					<dv-border-box-8>
+						<div class="data-heade">
+							<div>
+								<dv-decoration-8 :reverse="false" style="width:calc(25% + 80px);height:30px;position: absolute;top: 40px;right: 20px;" />
+							</div>
+							<div class="home-box">
+								<img class="home-icon" src="../layuiadmin/img/home.png" @click="toIndexPage">
+							</div>
+							<div class="title-box">
+								<!-- <p class="title">环保用电在线监管云平台</p> -->
+								<p class="title">
+									幼儿园在线管理平台
+									<dv-decoration-10 style="width:300px;height:40px;position: absolute;left: calc(50% - 150px);" />
+								</p>
+							</div>
+							<div class="time-box">
+								<p class="time-item" v-text="nowData"></p>
+							</div>
+							<div>
+								<dv-decoration-8 :reverse="true" style="width:calc(25% + 80px);height:30px;position: absolute;top: 40px;left: 20px;" />
+							</div>
+						</div>
+
+						<div class="left">
+							<div class="data-content">
+								<div class="enterprise-box">
+									<dv-border-box-2>
+										<div class="enterprise-item font-white" style="width: 100%;">
+											<p style="padding: 0;margin: 0;font-size: 16px;">学生人数</p>
+											<dv-digital-flop :config="enterpriseNum" />
+										</div>
+									</dv-border-box-2>
+								</div>
+
+								<div class="enterprise-box">
+									<dv-border-box-2>
+										<div class="enterprise-item font-white">
+											<p style="padding: 0;margin: 0;font-size: 16px;">当前校外人数</p>
+											<dv-digital-flop :config="productMonitorNum" />
+										</div>
+									</dv-border-box-2>
+								</div>
+
+								<div class="enterprise-box">
+									<dv-border-box-2>
+										<div class="enterprise-item font-white">
+											<p style="padding: 0;margin: 0;font-size: 16px;">今日体温异常人数</p>
+											<dv-digital-flop :config="treatMonitorNum" />
+										</div>
+									</dv-border-box-2>
+								</div>
+							</div>
+						</div>
+
+						<div class="center">
+							<div class="content-box">
+								<div class="data-content2">
+									<div class="stop-enter-list">
+										<dv-border-box-3 style="width: 100%; height: 270px;">
+											<p class="font-white" style="width: 100%;text-align: center;padding: 25px 0 0 0;margin: 0;height: 30px;line-height: 30px;">异常体温学生列表</p>
+											<dv-scroll-board :config="stopEnterList" style="width: calc(100% - 50px);height: 270px;padding: 0 0 0 25px;" />
+										</dv-border-box-3>
+									</div>
+
+									<div class="stop-enter-list">
+										<dv-border-box-3 style="width: 100%; height: 300px;padding-top: 10px;">
+											<dv-charts :option="effortsOption" />
+										</dv-border-box-3>
+									</div>
+								</div>
+								<!-- <div class="data-content2">
+									<dv-charts :option="startMonitorOption" style="width: 100%; height: 340px;margin-bottom: 100px;" />
+								</div> -->
+							</div>
+						</div>
+
+						<div class="right">
+							<div class="right-content-box">
+								<div class="data-content3">
+									<div class="enter-list">
+										<dv-border-box-3 style="width: 100%; height: 270px;">
+											<p class="font-white" style="width: 100%;text-align: center;padding: 20px 0 0 0;margin: 0;height: 30px;line-height: 30px;">最近一周各年级体温发热统计</p>
+											<dv-scroll-board :config="gradeEnterList" style="width: calc(100% - 50px);padding: 0 0 0 25px;" />
+										</dv-border-box-3>
+									</div>
+
+									<div class="enter-list">
+										<dv-border-box-3 style="width: 100%; height: 300px;padding-top: 10px;">
+											<p class="font-white" style="width: 100%;text-align: center;padding: 20px 0 0 0;margin: 0;height: 30px;line-height: 30px;">班级测温数据统计</p>
+											<dv-scroll-board :config="classEnterList" style="width: calc(100% - 50px);padding: 0 0 0 25px;" />
+										</dv-border-box-3>
+									</div>
+								</div>
+							</div>
+						</div>
+					</dv-border-box-8>
+				</dv-full-screen-container>
+			</div>
+		</div>
+
+
+
+
+
+
+		<script src="../layuiadmin/js/baseUrlConfig.js"></script>
+		<script src="../layuiadmin/plugin/vue.js"></script>
+		<script src="../layuiadmin/plugin/dataV/datav.map.vue.js"></script>
+		<script src="../layuiadmin/plugin/axios.js"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					nowData: "",
+					isReady: false,
+					enterpriseNum: {
+						number: [0],
+						content: "{nt}",
+						style: {
+							fontSize: 28,
+							fill: '#00F7DE',
+							fontWeight: 700
+						},
+						animationCurve: "easeOutCubic",
+						animationFrame: 50
+					},
+					productMonitorNum: {
+						number: [0],
+						content: "{nt}",
+						style: {
+							fontSize: 28,
+							fill: '#00F7DE',
+							fontWeight: 700
+						},
+						animationCurve: "easeOutCubic",
+						animationFrame: 50
+					},
+					treatMonitorNum: {
+						number: [0],
+						content: "{nt}",
+						style: {
+							fontSize: 28,
+							fill: '#f00',
+							fontWeight: 700
+						},
+						animationCurve: "easeOutCubic",
+						animationFrame: 50
+					},
+
+					stopEnterList: {
+						header: ['学生姓名', '年级', '体温', '测量日期'],
+						data: [],
+						index: true,
+						columnWidth: [80, 100, 100, 120],
+						align: ['center'],
+						// 整页滚动
+						carousel: 'page'
+					},
+
+					organizeAbnormal: {
+						lineWidth: 10,
+						radius: 45,
+						activeRadius: 50,
+						digitalFlopStyle: {
+							fontSize: 18
+						},
+						data: []
+					},
+					effortsOption: {
+						title: {
+							text: '一周体温异常趋势',
+							style: {
+								fill: "#fff"
+							}
+						},
+						xAxis: {
+							data: ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日'],
+							axisLabel: {
+								style: {
+									fill: '#fff'
+								}
+							},
+							
+							axisLine: {
+								style: {
+									stroke: '#fff'
+								}
+							},
+							axisTick: {
+								style: {
+									stroke: '#fff'
+								}
+							},
+							splitLine: {
+								style: {
+									stroke: '#fff'
+								}
+							}
+
+						},
+						yAxis: {
+							data: 'value',
+							axisLabel: {
+								style: {
+									fill: '#fff'
+								}
+							},
+							axisLine: {
+								style: {
+									stroke: '#fff'
+								}
+							},
+							axisTick: {
+								style: {
+									stroke: '#fff'
+								}
+							},
+							splitLine: {
+								style: {
+									stroke: '#fff'
+								}
+							}
+						},
+						series: [{
+							data: [0, 0, 0, 0, 0, 0, 0],
+							type: 'line',
+							lineArea: {
+								show: true
+							}
+						}]
+					},
+
+					gradeEnterList: {
+						data: []
+					},
+					classEnterList: {
+						header: ['班级', '已测温', '未测温', '发热'],
+						data: [],
+						columnWidth: [100],
+						align: ['center']
+					}
+
+
+				},
+				methods: {
+					homeData: function() {
+						this.isReady = true;
+						axios({
+								method: "POST",
+								url: BASEURL + "/kindergarten/homePage/queryHomePageReport",
+								params: {
+									kindergartensysno: window.localStorage.getItem("kindergartensysno")
+								}
+							})
+							.then(function(res) {
+								app.isReady = true;
+								// 学生数量
+								app.enterpriseNum = {
+									...app.enterpriseNum,
+									number: [res.data.studentInfoNum.stuNum]
+								}
+								// 当前在校学生
+								app.productMonitorNum = {
+									...app.productMonitorNum,
+									number: [res.data.studentInfoNum.inStuNum]
+								}
+								// 异常体温人数
+								app.treatMonitorNum = {
+									...app.treatMonitorNum,
+									number: [res.data.studentInfoNum.alarmNum]
+								}
+
+								// 体温异常学生列表
+								var reduceList = [];
+
+								for (var i = 0; i < res.data.alarmStudentList.length; i++) {
+									var reduceListData = [];
+									reduceListData.push(res.data.alarmStudentList[i].name);
+									reduceListData.push(res.data.alarmStudentList[i].className);
+									reduceListData.push(res.data.alarmStudentList[i].temperature);
+									reduceListData.push(res.data.alarmStudentList[i].recTime);
+
+									reduceList.push(reduceListData);
+								}
+								// console.log(reduceList)
+								app.stopEnterList = {
+									header: ['学生姓名', '班级编码', '体温', '测量日期'],
+									data: reduceList,
+									index: true,
+									columnWidth: [80, 100, 100, 120],
+									align: ['center'],
+									// carousel: 'page'
+								}
+
+
+
+
+								// 一周体温趋势
+								var effortsData = [];
+								var Datedata = [];
+								for (var i = 0; i < res.data.temperatureTrendList.length; i++) {
+									effortsData.push(res.data.temperatureTrendList[i].alarmNum)
+									Datedata.push(res.data.temperatureTrendList[i].day)
+								};
+								app.effortsOption = {
+									title: {
+										text: '一周体温异常趋势',
+										style: {
+											fill: "#fff"
+										}
+									},
+									
+									xAxis: {
+										data: Datedata,
+										axisLabel: {
+											style: {
+												fill: '#fff'
+											}
+										},
+										axisLine: {
+											style: {
+												stroke: '#fff'
+											}
+										},
+										axisTick: {
+											style: {
+												stroke: '#fff'
+											}
+										},
+										splitLine: {
+											style: {
+												stroke: '#fff'
+											}
+										}
+
+									},
+									yAxis: {
+										data: 'value',
+										axisLabel: {
+											style: {
+												fill: '#fff'
+											}
+										},
+										axisLine: {
+											style: {
+												stroke: '#fff'
+											}
+										},
+										axisTick: {
+											style: {
+												stroke: '#fff'
+											}
+										},
+										splitLine: {
+											style: {
+												stroke: '#fff'
+											}
+										}
+									},
+									series: [{
+										data: effortsData,
+										type: 'line',
+										lineArea: {
+											show: true
+										}
+									}]
+								};
+
+
+								// 最近一周各年级体温异常统计
+								var gradeTemperatureAlarmNum = [];
+								for (var z = 0; z < res.data.gradeTemperatureAlarmNum.length; z++) {
+									var gradeData = [];
+									gradeData.push(res.data.gradeTemperatureAlarmNum[z].gradeName)
+									gradeData.push('发热学生')
+									gradeData.push(res.data.gradeTemperatureAlarmNum[z].alarmNum)
+									gradeTemperatureAlarmNum.push(gradeData);
+								}
+								app.gradeEnterList = {
+									data: gradeTemperatureAlarmNum,
+								}
+
+
+								// 班级测温情况
+								var classTemperatureData = [];
+
+								for (var j = 0; j < res.data.classTemperature.length; j++) {
+									var classData = [];
+									classData.push(res.data.classTemperature[j].ClassName);
+									classData.push(res.data.classTemperature[j].yesNum);
+									classData.push(res.data.classTemperature[j].notNum);
+									classData.push(res.data.classTemperature[j].alarmNum.toString());
+
+									classTemperatureData.push(classData);
+								}
+								// console.log(classTemperatureData)
+								app.classEnterList = {
+									header: ['班级', '已测温', '未测温', '发热'],
+									data: classTemperatureData,
+									columnWidth: [100],
+									align: ['center']
+								}
+							})
+
+						this.getNowFormatDate();
+					},
+					toIndexPage: function() {
+						window.location.href = "./index.html";
+					},
+					getNowFormatDate: function() {
+						var date = new Date();
+						var seperator1 = "-";
+						var seperator2 = ":";
+						var month = date.getMonth() + 1;
+						var strDate = date.getDate();
+						if (month >= 1 && month <= 9) {
+							month = "0" + month;
+						}
+						if (strDate >= 0 && strDate <= 9) {
+							strDate = "0" + strDate;
+						}
+						var hours = date.getHours();
+						if (hours >= 0 && hours <= 9) {
+							hours = "0" + hours;
+						}
+						var minutes = date.getMinutes();
+						if (minutes >= 0 && minutes <= 9) {
+							minutes = "0" + minutes;
+						}
+						var seconds = date.getSeconds();
+						if (seconds >= 0 && seconds <= 9) {
+							seconds = "0" + seconds;
+						}
+						var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate +
+							" " + hours + seperator2 + minutes +
+							seperator2 + seconds;
+						this.nowData = currentdate;
+					}
+				},
+				mounted: function() {
+					// this.pageInit();
+				},
+				created() {
+					this.homeData();
+				}
+			})
+		</script>
+	</body>
+</html>

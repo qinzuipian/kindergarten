@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>考勤机设置</title>
+    <link rel="stylesheet" href="./../../../layuiadmin/layui/css/layui.css" media="all">
+    <link rel="stylesheet" href="./../../../layuiadmin/style/admin.css" media="all">
+    <!-- <link rel="stylesheet" href="./../../../layuiadmin/style/firmMonitor.css"> -->
+    <link rel="stylesheet" href="./../../../layuiadmin/plugin/element.css">
+</head>
+
+<body>
+    <div id="vm">
+        <div class="firmMain">
+            <div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">考勤机列表</li>
+                    <li>图片/视频设置</li>
+                    <li>提示设置</li>
+                </ul>
+                <div class="layui-tab-content" style="height: 100px;">
+                    <div class="layui-tab-item layui-show">1</div>
+                    <div class="layui-tab-item">2</div>
+                    <div class="layui-tab-item">3</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <script src="./../../../layuiadmin/plugin/browser.min.js"></script> -->
+    <script src="./../../../layuiadmin/plugin/polyfill.min.js"></script>
+    <script src="./../../../layuiadmin/layui/layui.js"></script>
+    <script src="./../../../layuiadmin/plugin/vue.js"></script>
+    <script src="./../../../layuiadmin/plugin/element.js"></script>
+    <script src="./../../../layuiadmin/plugin/axios.js"></script>
+    <script src="./../../../layuiadmin/js/baseUrlConfig.js"></script>
+    <script>
+        layui.config({
+            base: '../../../layuiadmin/' //静态资源所在路径
+        }).extend({
+            index: 'lib/index' //主入口模块
+        }).use(['index', 'table', 'laydate', 'form', 'jquery'], function () {
+            var form = layui.form,
+                table = layui.table,
+                $ = layui.jquery,
+                laydate = layui.laydate;
+            //时间日期
+            // laydate.render({
+            //     elem: '#timeDate',
+            //     format: 'yyyy-MM-dd'
+            // });
+            // laydate.render({
+            //     elem: '#yearDate',
+            //     type: 'year'
+            // });
+            // laydate.render({
+            //     elem: '#monthDate',
+            //     type: 'month'
+            // });
+
+            // table.render({
+            //     elem: '#LAY-app-content-list',
+            //     height: 555 //容器高度
+            //     ,
+            //     url: layui.setter.BASEURL + '/environmental_intelligent_monitoring/tbasenterprise/list' //数据接口
+            //     ,
+            //     page: true,
+            //     parseData: function (res) { // 数据重新处理为layUI的数据格式
+            //         var msg = {
+            //             "code": res.code, //解析接口状态
+            //             "msg": res.msg, //解析提示文本
+            //             "count": res.page.totalCount, //解析数据长度
+            //             "data": res.page.list //解析数据列表
+            //         };
+            //         return msg;
+            //     },
+            //     cols: [
+            //         [{
+            //             title: '企业名称',
+            //             field: 'name',
+            //             minWidth: 100
+            //         }, {
+            //             title: '企业社会信用代码',
+            //             field: 'trustCode',
+            //             minWidth: 100,
+            //             width: 200
+            //         }, {
+            //             title: '地址',
+            //             field: 'address',
+            //             minWidth: 100,
+            //             width: 200
+            //         }, {
+            //             title: '行业名称',
+            //             field: 'tradeName',
+            //             minWidth: 100
+            //         }, {
+            //             title: '创建时间',
+            //             field: 'createDate',
+            //             minWidth: 100
+            //         }
+            //         ]
+            //     ] //设置表头
+            //     ,
+            //      limit: 15,
+            //     limits: [15, 30, 50, 100, 200]
+            // });
+
+            // 监听select框选择事件
+            // form.on('select(timeType)', function (data) {
+            //     // console.log(data)
+            //     if (data.value == 'year') {
+            //         vm.timeShow = 2;
+
+            //     } else if (data.value == 'month') {
+            //         vm.timeShow = 3;
+
+            //     } else if (data.value == 'date') {
+            //         vm.timeShow = 1;
+            //     } else {
+            //         vm.timeShow = 0;
+            //     }
+
+            // })
+        })
+
+        var vm = new Vue({
+            el: "#vm",
+            data: {
+            },
+            watch: {
+
+            },
+            methods: {
+
+            },
+            created: function () {
+
+            }
+        })
+    </script>
+</body>
+
+</html>

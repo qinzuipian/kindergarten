@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+.content {
+	background: #fff;
+	padding-bottom: 50px;
+	width: 100%;
+	padding-top: 10px;
+}
+.homeMain {
+	width: 90%;
+	margin: 0 auto;
+	padding: 10px;
+}
+#teacherCircle {
+	border-left: 1px solid #eee;
+}
+.message-box {
+	display: flex;
+	background: #009999;
+	color: white;
+	border-radius: 3px;
+	height: 50px;
+}
+
+.message-box p:nth-child(1) {
+	width: 100px;
+	text-align: left;
+	padding-left: 20px;
+	font-size: 15px;
+	border-right: 1px solid white;
+	height: 50px;
+	line-height: 50px;
+}
+
+
+.left-row,
+.ceter-row {
+	height: 40px;
+	line-height: 40px;
+}
+.el-card__header{
+	background: #009999;
+	color: white;
+}
+.layui-table td, .layui-table th, .layui-table-col-set, .layui-table-fixed-r, .layui-table-grid-down, .layui-table-header, .layui-table-page, .layui-table-tips-main, .layui-table-tool, .layui-table-total, .layui-table-view, .layui-table[lay-skin=line], .layui-table[lay-skin=row]{
+	border: none;!important
+}

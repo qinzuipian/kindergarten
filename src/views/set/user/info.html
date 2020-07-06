@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>设置我的资料</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+		<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+		<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	</head>
+	<body>
+
+		<div class="layui-fluid" id="vm">
+			<div class="layui-row layui-col-space15">
+				<div class="layui-col-md12">
+					<div class="layui-card">
+						<div class="layui-card-header">设置我的资料</div>
+						<div class="layui-card-body">
+
+							<div class="layui-form" lay-filter="">
+								<div class="layui-form-item">
+									<label class="layui-form-label">昵称</label>
+									<div class="layui-input-inline">
+										<input type="text" name="nickname" lay-verify="nickname" v-model="nickName" autocomplete="off" placeholder="请输入昵称" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">手机</label>
+									<div class="layui-input-inline">
+										<input type="text" v-model="mobile" lay-verify="phone" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<label class="layui-form-label">邮箱</label>
+									<div class="layui-input-inline">
+										<input type="text" v-model="email" lay-verify="email" autocomplete="off" class="layui-input">
+									</div>
+								</div>
+								<div class="layui-form-item">
+									<div class="layui-input-block">
+										<button class="layui-btn" lay-submit lay-filter="setmyinfo">确认修改</button>
+										<button type="reset" class="layui-btn layui-btn-primary">重新填写</button>
+									</div>
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<script src="../../../layuiadmin/layui/layui.js"></script>
+		<script src="../../../layuiadmin/js/baseUrlConfig.js"></script>
+		<script src="../../../layuiadmin/plugin/vue.min.js"></script>
+		<script src="../../../layuiadmin/plugin/axios.js"></script>
+		<script>
+			layui.config({
+				base: '../../../layuiadmin/' //静态资源所在路径
+			}).extend({
+				index: 'lib/index' //主入口模块
+			}).use(['index', 'set']);
+			
+			var vm = new Vue({
+				el: "#vm",
+				data: {
+					nickName: window.localStorage.getItem("nickName"),
+					mobile: window.localStorage.getItem("mobile"),
+					email: window.localStorage.getItem("email"),
+				},
+				methods: {
+					changeUserInfo: function(){
+						var data = JSON.stringify({
+							mobile: vm.mobile,
+							email: vm.email,
+							nickName: vm.nickName,
+							token: window.localStorage.getItem("token")
+						})
+						axios({
+							method: "POST",
+							url: BASEURL + "/sys-mgr/sys/user/update",
+							data: data,
+							headers: {
+							    "Content-Type": "application/json;charset=UTF-8"
+							}
+						})
+						.then(function(res){
+							if(res.data.code == 0){
+								layer.alert('修改成功',function(index){
+									window.localStorage.setItem("email", vm.email);
+									window.localStorage.setItem("mobile", vm.mobile);
+									window.localStorage.setItem("nickName", vm.nickName);
+									window.parent.vm.username = window.localStorage.getItem("nickName"); // 重新刷新一下首页的用户名称
+									layer.close(index);
+								});
+							}else{
+								layer.msg(res.data.msg);
+								vm.nickName = window.localStorage.getItem("nickName");
+								vm.mobile = window.localStorage.getItem("mobile");
+								vm.email = window.localStorage.getItem("email");
+							}
+						})
+					}
+				}
+			})
+			
+			
+			
+		</script>
+	</body>
+</html>

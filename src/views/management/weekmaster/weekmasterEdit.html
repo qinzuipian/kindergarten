@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>编辑</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+        content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="stylesheet" type="text/css" href="../../../layuiadmin/layui/css/layui.css" />
+    <script src="../../../layuiadmin/layui/layui.js" type="text/javascript" charset="utf-8"></script>
+    <!-- 引入vue -->
+    <script src="../../../layuiadmin/plugin/vue.js" type="text/javascript" charset="utf-8"></script>
+    <script src="../../../layuiadmin/plugin/axios.js" type="text/javascript" charset="utf-8"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <style>
+        .btn-box {
+            text-align: right;
+        }
+
+        .btn-box button {
+            margin-right: 30px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="vm">
+        <div class="layui-fluid">
+            <div class="layui-row">
+                <form class="layui-form">
+                    <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            班级编码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" v-model="weekmaster.classsysno" class="layui-input" placeholder="班级编码" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            开始日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" v-model="weekmaster.fromdate" class="layui-input" placeholder="开始日期" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            结束日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" v-model="weekmaster.todate" class="layui-input" placeholder="结束日期" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            备注</label>
+                        <div class="layui-input-inline">
+                            <input type="text" v-model="weekmaster.memo" class="layui-input" placeholder="备注" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            创建时间</label>
+                        <div class="layui-input-inline">
+                            <input type="text" v-model="weekmaster.createdate" class="layui-input" placeholder="创建时间" />
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label for="bitian" class="layui-form-label">
+                            幼儿园编码</label>
+                        <div class="layui-input-inline">
+                            <input type="text" v-model="weekmaster.kindergartensysno" class="layui-input"
+                                placeholder="幼儿园编码" />
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="btn-box">
+            button class="layui-btn" @click="submitData()">确定</button>
+        </div>
+    </div>
+    <script>
+        /*
+*   @Author: liangbiaobiao
+*   @email: pokerface0206@163.com
+*/
+
+        var vm = new Vue({
+            el: "#vm",
+            data: {
+                weekmaster: {}
+            },
+            methods: {
+                pageInit: function () {
+                    var editData = JSON.parse(window.localStorage.getItem("memberEdit"));
+                    this.weekmaster = editData[0];
+                    console.log(this.weekmaster.bitian);
+                    this.$forceUpdate();
+                    window.localStorage.removeItem("memberEdit");
+                },
+                submitData: function () {
+                    console.log(this.weekmaster.bitian);
+                    layer.alert("编辑成功", function () {
+                        xadmin.close();
+                        xadmin.father_reload();
+                    })
+                    axios({
+                        method: "post",
+                        url: baseUrl + '/kindergarten/weekmaster/update',
+                        params: {}
+                    }).then(function (res) {
+                        if (res.code == 0) {
+                            layer.alert("编辑成功", function (index) {
+                                xadmin.close();
+                            })
+                        } else {
+
+                        }
+                    }).catch(function (err) {
+                        console.log(err);
+                    });
+                }
+            },
+            mounted() {
+                this.pageInit();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+@charset "utf-8";
+
+.echartShow {
+	position: relative;
+}
+.echartShow span,.tableOne p,.tableTwo p,.layui-tab-item p {
+	font-size: 16px;
+	font-weight: 700;
+}
+
+.echartShow .layui-form-item {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.tableOne p  {
+	margin-bottom: 10px;
+}
+.layui-inline {
+	margin: 10px 0 10px 0;
+}

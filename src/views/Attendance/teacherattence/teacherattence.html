@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>老师考勤表</title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<link rel="stylesheet" href="../../../layuiadmin/layui/css/layui.css" media="all">
+	<link rel="stylesheet" href="../../../layuiadmin/style/admin.css" media="all">
+	<style>
+		.layui-tab-content p {
+			font-size: 16px;
+			font-weight: 700;
+			margin: 10px 0 10px 0;
+		}
+
+		.btn {
+			margin-top: 10px;
+		}
+
+		.allTable {
+			text-align: center;
+			white-space: nowrap;
+			overflow-x: auto;
+			width: auto;
+			height: 400px;
+			width: 100%;
+			position: relative;
+		}
+
+		.tableList {
+			width: 90%;
+			position: absolute;
+			top: 0;
+			left: 9%;
+			background-color: #fff;
+			/* overflow-x: auto; */
+			/* float: left; */
+		}
+
+		.tableLeft {
+			width: 9%;
+			background-color: #fff;
+		}
+
+		.tableList tr,
+		.tableLeft tr {
+			height: 48px;
+			line-height: 48px;
+		}
+
+		.tableList tr th,
+		.tableLeft tr th {
+			color: #909399;
+		}
+
+		.tableList tr th p,
+		.tableLeft tr th p {
+			padding: 0;
+			margin: 0;
+			font-size: 14px;
+		}
+
+		.tableList tr th,
+		.tableList tr td,
+		.tableLeft tr th,
+		.tableLeft tr td {
+			border: 1px solid #eee;
+			text-align: center;
+			padding: 6px;
+		}
+		.tableLeft tr th {
+			height: 40px;
+		}
+		.tableList tr td {
+			font-size: 24px;
+			color: aqua;
+		}
+	</style>
+</head>
+
+<body>
+
+	<div id="vm">
+		<div class="layui-fluid">
+			<div class="layui-card">
+				<div class="layui-tab layui-tab-brief" lay-filter="docDemoTabBrief">
+					<ul class="layui-tab-title">
+						<li class="layui-this">考勤统计</li>
+						<li>考勤记录</li>
+						<li>刷卡记录</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-form layui-show">
+							<div class="layui-inline">
+								<label class="layui-form-label">日期选择</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="startEchartsDate" name="startIndate"
+										placeholder="请输入开始日期">
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="endEchartsDate" name="endIndate"
+										placeholder="请输入结束日期">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<button class="layui-btn layuiadmin-btn-list" id="withExport">
+									<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+								</button>
+							</div>
+							<p>教师考勤情况</p>
+							<div id="teachLineChart" style="width:100%; height: 460px;"></div>
+						</div>
+						<div class="layui-tab-item layui-form">
+							<div class="layui-inline">
+								<label class="layui-form-label">职工姓名</label>
+								<div class="layui-input-inline">
+									<input type="text" v-model="Recordname" placeholder="请输入" autocomplete="off"
+										class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label">日期选择</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="startRecordDate" placeholder=" 请输入开始日期">
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="endRecordDate" placeholder="请输入结束日期">
+								</div>
+							</div>
+
+							<div class="layui-inline">
+								<button class="layui-btn layuiadmin-btn-list" @click="tableRecordShow">
+									<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+								</button>
+							</div>
+							<p>教师考勤表</p>
+							<div class="allTable">
+								<table class="tableLeft layui-table" v-show="dataPeople.length!=0">
+									<thead>
+										<tr>
+											<th>
+												职工姓名
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(item,index) in dataPeople" :key="index">
+											<td>{{item.name}}</td>
+										</tr>
+									</tbody>
+								</table>
+								<table class="tableList layui-table">
+									<thead>
+										<tr>
+											<th v-for="(item,index) in dateList" :key="index">{{item.time}}<p
+													v-if="item.workDay!=undefined">星期{{item.workDay}}</p>
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr v-for="(item,index) in sortTeacherData" :key="index">
+											<td v-for="(it,index) in item" :key="index">{{it.kwh}}</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							<!-- <table id="LAY-app-content-list" lay-filter="LAY-app-content-list"></table> -->
+							<div class="layui-inline btn">
+								<button class="layui-btn layui-btn-warm">
+									<i class="layui-icon layui-icon-senior"></i>
+									导出
+								</button>
+							</div>
+						</div>
+						<div class="layui-tab-item layui-form">
+							<div class="layui-inline">
+								<label class="layui-form-label">职工姓名</label>
+								<div class="layui-input-inline">
+									<input type="text" name="name" placeholder="请输入" autocomplete="off"
+										class="layui-input">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<label class="layui-form-label">日期选择</label>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="startCardDate" name="startDate"
+										placeholder="请输入开始日期">
+								</div>
+								<div class="layui-input-inline">
+									<input type="text" class="layui-input" id="endCardDate" name="endDate"
+										placeholder="请输入结束日期">
+								</div>
+							</div>
+							<div class="layui-inline">
+								<button class="layui-btn layuiadmin-btn-list" lay-submit
+									lay-filter="LAY-app-Record-search">
+									<i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+								</button>
+							</div>
+							<table style="margin-top:10px;" id="LAY-app-content-two" lay-filter="LAY-app-content-two">
+							</table>
+							<div class="layui-inline btn">
+								<button class="layui-btn layui-btn-warm">
+									<i class="layui-icon layui-icon-senior"></i>
+									导出
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script src="../../../layuiadmin/layui/layui.js"></script>
+	<script src="../../../layuiadmin/plugin/vue.js"></script>
+	<script src="../../../layuiadmin/plugin/echarts.min.js"></script>
+	<script src="../../../layuiadmin/plugin/axios.js"></script>
+	<script src="../../../layuiadmin/js/baseUrlConfig.js"></script>
+	<script>
+		layui.config({
+			base: '../../../layuiadmin/' //静态资源所在路径
+		}).extend({
+			index: 'lib/index' //主入口模块
+		}).use(['index', 'table', 'laydate', 'echarts', 'jquery'], function () {
+			var table = layui.table,
+				form = layui.form,
+				laydate = layui.laydate,
+				echarts = layui.echarts,
+				$ = layui.jquery;
+
+
+			//考勤统计
+			var d = new Date();
+			laydate.render({
+				elem: '#startEchartsDate'
+				, value: d.getFullYear() + '-' + lay.digit(d.getMonth() + 1) + '-' + lay.digit(d.getDate() - 6)
+				, trigger: 'click'
+			});
+			laydate.render({
+				elem: '#endEchartsDate'
+				, value: new Date()
+				, trigger: 'click'
+			});
+
+			//考勤记录
+			laydate.render({
+				elem: '#startRecordDate'
+				, value: d.getFullYear() + '-' + lay.digit(d.getMonth()) + '-' + lay.digit(d.getDate())
+				, trigger: 'click'
+				, done: (value) => {
+					console.log(value)
+					vm.startRecordIndate = value;
+				}
+			});
+			vm.startRecordIndate = $("#startRecordDate").val()
+			// console.log($("#startRecordDate").val())
+			laydate.render({
+				elem: '#endRecordDate'
+				, value: new Date()
+				, trigger: 'click'
+				, done: (value) => {
+					console.log(value)
+					vm.endRecordIndate = value;
+				}
+			});
+			vm.endRecordIndate = $("#endRecordDate").val()
+			//刷卡记录
+			laydate.render({
+				elem: '#startCardDate'
+				, value: d.getFullYear() + '-' + lay.digit(d.getMonth() + 1) + '-' + lay.digit(d.getDate() - 6)
+				, trigger: 'click'
+			});
+			laydate.render({
+				elem: '#endCardDate'
+				, value: new Date()
+				, trigger: 'click'
+			});
+
+			// echarts图表的显示
+			chartExport();
+			function chartExport() {
+				axios({
+					method: "post",
+					url: BASEURL + 'kindergarten/teacherattence/attendanceStatistics',
+					data: {
+						startDate: $("#startEchartsDate").val(),
+						endDate: $("#endEchartsDate").val(),
+						kindergartensysno: localStorage.getItem("kindergartensysno")
+					},
+					headers: {
+						"Content-Type": "application/json;charset=UTF-8"
+					}
+				}).then(function (res) {
+					if (res.data.code == 0) {
+						var chartData = res.data.attNum;
+						var totalNum = res.data.empNum;
+						var dateList = [];
+						var attendance = [];
+						for (var i = 0; i < chartData.length; i++) {
+							dateList.push(chartData[i].attendDate);
+							attendance.push((chartData[i].num / totalNum).toFixed(2));
+						}
+						console.log(attendance)
+
+						var Chart = layui.echarts.init(document.getElementById('teachLineChart'));
+						Chart.showLoading({
+							text: "加载中"
+						});
+						var option = {
+							tooltip: {
+								trigger: 'axis'
+							},
+							legend: {
+								data: ['出勤率']
+							},
+							xAxis: {
+								type: 'category',
+								data: dateList
+							},
+							yAxis: {
+								type: 'value'
+							},
+							series: [{
+								data: attendance,
+								type: 'line',
+								name: '出勤率'
+							}]
+						};
+						Chart.hideLoading();
+						Chart.setOption(option, true)
+					} else {
+
+					}
+				}).catch(function (err) {
+					// console.log(err);
+				});
+			}
+			// 职工统计图表查询按钮点击事件
+			$("#withExport").click(function () {
+				chartExport();
+			});
+
+
+			// 刷卡记录
+			table.render({
+				elem: '#LAY-app-content-two'
+				, height: 480 //容器高度
+				, url: layui.setter.BASEURL + 'kindergarten/teacherattence/queryAttencelist' //数据接口
+				, method: 'post'
+				, where: {
+					kindergartensysno: "1",
+					startDate: $("#startCardDate").val(),
+					endDate: $("#endCardDate").val()
+				}
+				, contentType: 'application/json'
+				, page: true
+				, parseData: function (res) { // 数据重新处理为layUI的数据格式
+					var msg = {
+						"code": res.code, //解析接口状态
+						"msg": res.msg, //解析提示文本
+						"count": res.page.totalCount, //解析数据长度
+						"data": res.page.list //解析数据列表
+					};
+					return msg;
+				}
+				, cols: [[
+					// { checkbox: true },
+					{ title: '序号', type: 'numbers', minWidth: 100 },
+					{ title: '老师', field: 'name', minWidth: 100 },
+					{ title: '联系方式', field: 'mobilephone', minWidth: 100 },
+					{ title: '职称', field: 'worktitle', minWidth: 100 },
+					{ title: '签到时间', field: 'attenddate', minWidth: 100 },
+					{ title: '签退时间', field: 'leavetime', minWidth: 100 },
+					{ title: '消毒', field: 'disinfect', minWidth: 100 },
+					{ title: '体温', field: 'temperature', minWidth: 100 },
+					// { title: '创建时间', field: 'createtime', minWidth: 100 }
+				]] //设置表头
+				, limit: 10
+				, limits: [10, 15, 20, 25, 30]
+			});
+
+			//监听搜索
+			form.on('submit(LAY-app-Record-search)', function (data) {
+				var field = data.field;
+				// console.log(field)
+				//执行重载
+				table.reload('LAY-app-content-two', {
+					where: field
+				});
+			});
+
+			var $ = layui.$,
+				active = {
+					batchdel: function () {
+						var checkStatus = table.checkStatus('LAY-app-content-list'),
+							checkData = checkStatus.data; //得到选中的数据
+
+						if (checkData.length === 0) {
+							return layer.msg('请选择数据');
+						}
+
+						layer.confirm('确定删除吗？', function (index) {
+
+							//执行 Ajax 后重载
+							/*
+							admin.req({
+							  url: 'xxx'
+							  //,……
+							});
+							*/
+							table.reload('LAY-app-content-list');
+							layer.msg('已删除');
+						});
+					},
+					add: function () {
+						layer.open({
+							type: 2,
+							title: '添加文章',
+							content: 'listform.html',
+							maxmin: true,
+							area: ['550px', '550px'],
+							btn: ['确定', '取消'],
+							yes: function (index, layero) {
+								//点击确认触发 iframe 内容中的按钮提交
+								var submit = layero.find('iframe').contents().find("#layuiadmin-app-form-submit");
+								submit.click();
+							}
+						});
+					},
+					edit: function () {
+
+					}
+				};
+
+			$('.layui-btn.layuiadmin-btn-list').on('click', function () {
+				var type = $(this).data('type');
+				active[type] ? active[type].call(this) : '';
+			});
+
+		});
+
+
+
+		var vm = new Vue({
+			el: "#vm",
+			data: {
+				dateList: [],
+				dataPeople: [],
+				compareList: [],
+				sortTeacherData: [],
+				// 考勤记录
+				Recordname: "",
+				startRecordIndate: "",
+				endRecordIndate: ""
+			},
+			methods: {
+				// 考勤记录table栏表格/考勤记录查询按钮点击事件
+				tableRecordShow() {
+					vm.sortTeacherData = [];
+					axios({
+						method: "post",
+						url: BASEURL + 'kindergarten/teacherattence/list',
+						data: {
+							startDate: this.startRecordIndate,
+							endDate: this.endRecordIndate,
+							name: this.Recordname,
+							kindergartensysno: 1
+						},
+						headers: {
+							"Content-Type": "application/json;charset=UTF-8"
+						}
+					}).then(function (res) {
+						// // console.log(res)
+						if (res.data.code == 0) {
+							var data = res.data.data;
+							var dateList = res.data.dateList;
+							/* dateList.unshift(6, 0);
+							var objInsert = [
+								{ time: "职工姓名" }
+							]
+							Array.prototype.splice.apply(objInsert, dateList);
+							vm.dateList = objInsert; */
+							vm.dateList = dateList;
+							vm.dataPeople = data;
+
+							vm.dataPeople.forEach(function (data) {
+								// console.log(data)
+								var obj = {};
+								var sortData = [];
+								if (data.listTeaAttence.length != 0) {
+									for (i = 0; i < data.listTeaAttence.length; i++) {
+										vm.dateList.forEach(function (item) {
+											let exist = data.listTeaAttence.some(t2 => item.time == t2.attenddate);
+											// console.log(exist);
+											if (!exist) {
+												sortData.push({
+													time: item.time,
+													kwh: ""
+												});
+											} else {
+												sortData.push({
+													time: item.time,
+													kwh: "★"
+												});
+
+											}
+										})
+										break;
+									}
+								} else {
+									vm.dateList.forEach(function (item) {
+										// console.log(item)
+										sortData.push({
+											time: item.time,
+											kwh: ""
+										});
+									})
+
+								}
+								vm.sortTeacherData.push(sortData);
+							});
+
+							// console.log(vm.sortTeacherData)
+
+						} else {
+						}
+					}).catch(function (err) {
+						// console.log(err);
+					});
+				}
+
+			},
+			mounted() {
+				// this.lineChartInit();
+			},
+			created() {
+				// this.tableRecordShow();
+				var _this = this;
+				setTimeout(function () {
+					_this.tableRecordShow();
+				}, 2000)
+
+			}
+		})
+	</script>
+</body>
+
+</html>

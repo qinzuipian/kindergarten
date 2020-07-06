@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html class="x-admin-sm">
+
+<head>
+    <meta charset="UTF-8">
+    <title>新增</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport"
+          content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi"/>
+    <link rel="stylesheet" href="../../css/font.css">
+    <link rel="stylesheet" href="../../css/xadmin.css">
+    <script type="text/javascript" src="../../libs/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="../../libs/xadmin/xadmin.js"></script>
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../../libs/vue/vue.js"></script>
+    <script src="../../libs/vue/axios.js"></script>
+    <script src="../../js/common.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    
+    <![endif]-->
+    <style>
+        .btn-box{
+            text-align: right;
+        }
+        .btn-box button{
+            margin-right: 30px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+<div id="vm">
+    <div class="layui-fluid">
+        <div class="layui-row">
+            <form class="layui-form">
+            		    		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       学生编码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.studentsysno" class="layui-input" placeholder="学生编码"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       幼儿园编码</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.kindergartensysno" class="layui-input" placeholder="幼儿园编码"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       签到日期</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.attenddate" class="layui-input" placeholder="签到日期"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       签到时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.attendtime" class="layui-input" placeholder="签到时间"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       签到图片</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.attendpicture" class="layui-input" placeholder="签到图片"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       签退时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.leavetime" class="layui-input" placeholder="签退时间"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       签退图片</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.leavepicture" class="layui-input" placeholder="签退图片"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       消毒</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.disinfect" class="layui-input" placeholder="消毒"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       体温</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.temperature" class="layui-input" placeholder="体温"/>
+                    </div>
+                </div>
+            		    		                    <div class="layui-form-item">
+                    <label for="bitian" class="layui-form-label">
+                       创建时间</label>
+                    <div class="layui-input-inline">
+                        <input type="text" v-model="studentattence.createtime" class="layui-input" placeholder="创建时间"/>
+                    </div>
+                </div>
+            		                </form>
+        </div>
+    </div>
+    <div class="btn-box">
+        <button class="layui-btn" @click="addData()">增加</button>
+    </div>
+</div>
+<script src="../../js/studentattence/studentattenceAdd.js"></script>
+</body>
+</html>
